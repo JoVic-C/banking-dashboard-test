@@ -29,8 +29,8 @@ const swaggerOptions = {
     ],
     servers: [
       {
-        //url: process.env.BASE_URL, 
-        url: process.env.URL_HEROKU
+        url: "http://localhost:3000", 
+        //url: "https://intense-forest-45736-b3afbcdd53ff.herokuapp.com"
       },
     ],
   },
@@ -49,6 +49,6 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use(mainRouter);
 
-app.listen(process.env.URL_HEROKU || 3000, () => {
+app.listen(process.env.PORT || 3000, () => {
   console.log(`Server is running on port ${process.env.PORT || 3000}`);
 });
