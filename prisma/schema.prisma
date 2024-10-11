@@ -1,0 +1,126 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Tenant {
+  id           String   @id @default(uuid())
+  clientId     String   @default(uuid())
+  clientSecret String   @default(uuid())
+  createdAt    DateTime @default(now())
+
+  account Account[]
+}
+
+model Account {
+  id          String   @id @default(uuid())
+  name        String
+  tenantId    String
+  accountType String
+  document    String
+  status      String?  @default("PENDING_KYC")
+  balance     Int?     @default(0)
+  branch      String?  @default("0001")
+  number      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+
+  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+}
+
+model Transaction {
+  id        String @id @default(uuid())
+  accountId String
+
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  ted      Ted[]
+  doc      Doc[]
+  billets  Billet[]
+  pix      TransferPix[]
+  Internal Internal[]
+}
+
+model Ted {
+  id                String  @id @default(uuid())
+  amount            Int
+  recipientName     String
+  recipientDocument String
+  recipientBank     String
+  recipientBranch   String
+  recipientAccount  String
+  description       String?
+
+  transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  transactionId String
+}
+
+model Doc {
+  id                String  @id @default(uuid())
+  amount            Int
+  recipientName     String
+  recipientDocument String
+  recipientBank     String
+  recipientBranch   String
+  recipientAccount  String
+  description       String?
+
+  transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  transactionId String
+}
+
+model Billet {
+  id            String  @id @default(uuid())
+  transactionId String
+  amount        Int
+  billetCode    String
+  dueDate       String
+  description   String?
+
+  transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+}
+
+model Pix {
+  id                String @id @default(uuid())
+  pixKey            String @unique
+  recipientName     String
+  recipientDocument String
+  e2eId             String
+
+  transferPix TransferPix[]
+}
+
+model TransferPix {
+  id            String @id @default(uuid())
+  pixId         String
+  amount        Int
+  transactionId String
+  pixKey        String
+  e2eId         String
+  description   String
+
+  transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  pix         Pix         @relation(fields: [pixId], references: [id], onDelete: Cascade)
+}
+
+model Internal {
+  id              String @id @default(uuid())
+  transactionId   String
+  sourceAccountId String
+  targetAccountId String
+  description     String
+  amount          Int
+
+  transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+}
