@@ -46,6 +46,7 @@ export const createTransferDoc = async(data: Prisma.DocCreateInput) => {
 }
 
 export const findPixKey = async(pixKey: string) => {
+
     
     const pixRecipient = await prisma.pix.findFirst({
         where: {

@@ -158,28 +158,31 @@ export const getPixKey = async(req: ExtendedRequest, res: Response) => {
         return res.status(400).json({error: safeParams.error.flatten().fieldErrors});
     };
 
+    const newE2E = generateE2EId()
+
+
+
     const pixKey = await findPixKey(
         safeParams.data.pixKey
     )
 
     if(!pixKey) {
-        return res.status(400).json({error: 'Pix não existe'})
+        const newPix =    await prisma.pix.create({
+        data: {
+            pixKey: safeParams.data.pixKey,
+            recipientName: 'ICA BANK MOCK',
+            recipientDocument: '123',
+            e2eId: newE2E
+        }
+        })
+
+        return res.status(200).json(newPix)
     }
 
-    const newE2E = generateE2EId()
+    
     
 
-    const newBalance = await prisma.pix.update({
-        data: {
-            e2eId: newE2E
-        },
-        where: {
-            id: pixKey.id
-
-        }
-    })
-
-    return res.status(200).json(newBalance)
+    return res.status(200).json(pixKey)
 
 }
 

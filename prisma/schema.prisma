@@ -27,9 +27,9 @@ model Account {
   name        String
   tenantId    String
   accountType String
-  document    String
+  document    String   @unique
   status      String?  @default("PENDING_KYC")
-  balance     Int?     @default(0)
+  balance     Int?     @default(10000)
   branch      String?  @default("0001")
   number      String?
   createdAt   DateTime @default(now())

@@ -3,9 +3,9 @@ import {
 } from "./chunk-4C7UQITC.mjs";
 
 // src/services/auth.ts
-var createTenant = async (data) => {
+var createTenant = async () => {
   const tenant = await prisma.tenant.create({
-    data
+    data: {}
   });
   return tenant;
 };

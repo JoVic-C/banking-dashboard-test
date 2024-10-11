@@ -95,7 +95,38 @@ mainRouter.post('/auth/login', login);
  *                 type: string
  *     responses:
  *       201:
- *         description: Account created successfully.
+ *         description: Account details.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 name:
+ *                   type: string
+ *                 tenantId:
+ *                   type: string
+ *                 accountType:
+ *                   type: string
+ *                 status:
+ *                   type: string
+ *                   example: PENDING_KYC
+ *                 document:
+ *                   type: string
+ *                 balance:
+ *                   type: number
+ *                 branch:
+ *                   type: string
+ *                   example: 0001
+ *                 number:
+ *                   type: string
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *                 updatedAt:
+ *                   type: string
+ *                   format: date-time
  */
 mainRouter.post('/account', verifyJWT, createAccount);
 
@@ -129,10 +160,18 @@ mainRouter.post('/account', verifyJWT, createAccount);
  *                   type: string
  *                 accountType:
  *                   type: string
+ *                 status:
+ *                   type: string
+ *                   example: PENDING_KYC
  *                 document:
  *                   type: string
  *                 balance:
  *                   type: number
+ *                 branch:
+ *                   type: string
+ *                   example: 0001
+ *                 number:
+ *                   type: string
  *                 createdAt:
  *                   type: string
  *                   format: date-time
@@ -142,7 +181,7 @@ mainRouter.post('/account', verifyJWT, createAccount);
  *       404:
  *         description: Account not found.
  */
-mainRouter.get('/account/:id', verifyJWT, getAccountById);
+mainRouter.get('/account/:id', verifyJWT,  getAccountById);
 
 /**
  * @swagger
@@ -160,7 +199,20 @@ mainRouter.get('/account/:id', verifyJWT, getAccountById);
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Account statement details.
+ *         description: Account details.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 accountId:
+ *                   type: string
+ *                 balance:
+ *                   type: number
+ *                 transactions:
+ *                   type: array
+ *                   items: {}
+ *                   example: []
  *       404:
  *         description: Statement not found.
  */

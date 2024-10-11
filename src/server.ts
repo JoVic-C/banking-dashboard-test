@@ -6,8 +6,8 @@ import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
 const swaggerOptions = {
-  swaggerDefinition: {
-    openapi: "3.0.0",  
+  definition: {
+    openapi: "3.0.0",
     info: {
       title: "Banking API",
       version: "1.0.0",
@@ -18,17 +18,23 @@ const swaggerOptions = {
         bearerAuth: {
           type: "http",
           scheme: "bearer",
-          bearerFormat: "JWT"
-        }
-      }
+          bearerFormat: "JWT",
+        },
+      },
     },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
     servers: [
       {
-        url: "http://localhost:3000",  
+        url: "http://localhost:3000", 
+        //url: "https://intense-forest-45736-b3afbcdd53ff.herokuapp.com"
       },
     ],
   },
-  apis: ["./src/routes/*.ts"],  
+  apis: ["./src/routes/*.ts"],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
@@ -39,7 +45,7 @@ app.use(cors());
 app.use(urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));  // Usar a configuração corrigida
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use(mainRouter);
 
