@@ -29,8 +29,8 @@ const swaggerOptions = {
     ],
     servers: [
       {
-        url: "http://localhost:3000", 
-        //url: "https://intense-forest-45736-b3afbcdd53ff.herokuapp.com"
+        //url: "http://localhost:3000", 
+        url: "https://intense-forest-45736-b3afbcdd53ff.herokuapp.com"
       },
     ],
   },
